@@ -5,6 +5,7 @@
     border-radius: 50%;
     position: relative;
     transform: rotate(-90deg);
+    margin: 20px auto;
 }
 
 .clock h6 {
@@ -27,4 +28,8 @@
 
 .tick.minute {
     width: 60px;
+}
+
+.cronometro.alarm {
+    background-color: red;
 }

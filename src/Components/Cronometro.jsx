@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Cronometro.css";
+import AlamForm from "./AlarmForm";
 /**
  *
  * Che sia bello e funzionale
@@ -11,6 +12,8 @@ function Cronometro() {
   const [isRunning, setIsRunning] = useState(false);
   // ms
   const [time, setTime] = useState(0);
+  const [alarmTime, setAlarmTime] = useState(null);
+  const [showAlarm, setShowAlarm] = useState(false);
 
   useEffect(() => {
     //..... Se isRunning è true, avvio il cronometro
@@ -23,6 +26,17 @@ function Cronometro() {
     }
   }, [isRunning]);
 
+  useEffect(() => {
+    console.log("Time è cambiato", time, alarmTime);
+    // Imposto showAlarm a true se il tempo è maggiore di alarmTime
+    // e showAlarm non è già stato impostato
+    if (time > alarmTime * 1000 && showAlarm === false) {
+      // setIsRunning(false);
+      setShowAlarm(true);
+      console.warn("Allarme scattato");
+    }
+  }, [time]);
+
   function startStop() {
     setIsRunning(!isRunning);
   }
@@ -30,6 +44,7 @@ function Cronometro() {
   function reset() {
     setIsRunning(false);
     setTime(0);
+    setShowAlarm(false);
   }
 
   const milliseconds = ("00" + (time % 1000)).slice(-2);
@@ -37,8 +52,8 @@ function Cronometro() {
   const minutes = ("00" + Math.floor(time / 1000 / 60)).slice(-2);
 
   return (
-    <div>
-      <h1>Cronometro</h1>
+    <div className={`cronometro ${showAlarm ? " alarm" : ""}`}>
+      <h1>Cronometro {showAlarm ? "SVEGLIAAAAAA!!!11!!1" : ""}</h1>
 
       <div className={"clock " + (isRunning ? "playing" : "")}>
         <div
@@ -59,6 +74,7 @@ function Cronometro() {
       </div>
       <button onClick={startStop}>start/stop</button>
       <button onClick={reset}>reset</button>
+      <AlamForm onSetAlarm={(time) => setAlarmTime(time)} />
     </div>
   );
 }
